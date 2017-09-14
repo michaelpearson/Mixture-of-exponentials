@@ -7,7 +7,7 @@ def generate_data(k=2, d=2, file_name='data.csv'):
     mixing = np.random.rand(k).reshape(k, -1)
     mixing /= mixing.sum()
 
-    element_count = 1000
+    element_count = 400
     element_size = (element_count, d)
 
     values_mean_0 = np.random.exponential(1, element_size) * (np.random.randint(0, 2, element_size) - 0.5) * 2

@@ -4,10 +4,11 @@ import matplotlib.pyplot as plt
 
 def calculate_probability(instances, means):
     """
-    Given a matrix consisting of rows of instances and columns of dimensions calculate the probability.
+    Given a matrix consisting of rows of instances and columns of dimensions calculate the probability according
+    to a single exponential distribution.
     """
     shifted_instances = instances - means
-    distances = np.sqrt(np.sum(shifted_instances * shifted_instances, axis=1).reshape((-1, 1)))
+    distances = np.sqrt(np.sum(shifted_instances ** 2, axis=1).reshape((-1, 1)))
     return np.exp(-distances)
 
 
@@ -17,9 +18,11 @@ def calculate_responsibilities(instances, means, mixtures):
     """
     probabilities = np.zeros((instances.shape[0], means.shape[0]))
 
-    for index in range(means.shape[0]):
-        probabilities[:, index] = (calculate_probability(instances, means[index, :]) * mixtures[index]).reshape((1, -1))
-    probabilities = probabilities / probabilities.sum(axis=1).reshape((-1, 1))
+    for class_index in range(means.shape[0]):
+        probabilities[:, class_index] = (calculate_probability(instances, means[class_index, :]) * mixtures[class_index]).reshape((1, -1))
+
+    probabilities /= probabilities.sum(axis=1).reshape((-1, 1)) * mixtures[class_index]
+
     return probabilities
 
 
